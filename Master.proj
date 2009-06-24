@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build"  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Required Import to use MSBuild Community Tasks -->
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+
+  <PropertyGroup>
+    <BuildConfiguration>Release</BuildConfiguration>
+    <BuildFolder>Build</BuildFolder>
+    <LibraryFolder>Libraries</LibraryFolder>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Major>1</Major>
+    
+    <Minor>0</Minor>
+    <BindMinor>0</BindMinor>
+    
+    <Build>0</Build>
+    <BindBuild>0</BindBuild>
+
+    <Revision>0</Revision>
+    <BindRevision>0</BindRevision>
+
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <DefaultExclude Include="**\obj\**" />
+    <DefaultExclude Include="**\bin\**" />
+    <DefaultExclude Include="**\Sample\**" />
+    <DefaultExclude Include="**\Libraries\**" />
+    <DefaultExclude Include="**\Help\**" />
+    <DefaultExclude Include="**\Patch\**" />
+    <DefaultExclude Include="**\_ReSharper*\**" />
+    <DefaultExclude Include="*.proj" />
+    <DefaultExclude Include="*.dbml" />
+    <DefaultExclude Include="*.zip" />
+    <DefaultExclude Include="**\*.user" />
+    <DefaultExclude Include="**\*.resharper" />
+    <DefaultExclude Include="**\*.cache" />
+    <DefaultExclude Include="*.teamcity.*" />
+  </ItemGroup>
+
+  <Target Name="Version">
+    <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnVersion>
+
+    <Message Text="Revision: $(Revision)"/>
+
+    <Time>
+      <Output TaskParameter="Month" PropertyName="Month" />
+      <Output TaskParameter="Day" PropertyName="Day" />
+      <Output TaskParameter="Year" PropertyName="Year" />
+    </Time>
+
+    <AssemblyInfo CodeLanguage="CS"
+      OutputFile="$(MSBuildProjectDirectory)\Source\GlobalAssemblyInfo.cs"
+      AssemblyCompany="LoreSoft"
+      AssemblyProduct="SvnTools"
+      AssemblyCopyright="Copyright (c) $(Year) LoreSoft."
+      AssemblyConfiguration="$(BuildConfiguration)"
+      AssemblyVersion="$(Major).$(BindMinor).$(BindBuild).$(BindRevision)"
+      AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
+      AssemblyInformationalVersion="$(Major).$(Minor).$(Build).$(Revision)"
+      GenerateClass="true" />
+
+  </Target>
+
+  <Target Name="Compile" DependsOnTargets="Version">
+    <MSBuild Projects="Source\SvnTools.sln"
+             Properties="Configuration=$(BuildConfiguration)"/>
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="Build">
+    <CreateItem Include="**\*.*" Exclude="@(DefaultExclude)" >
+      <Output TaskParameter="Include" ItemName="ZipFiles" />
+    </CreateItem>
+
+    <Zip Files="@(ZipFiles)"
+			 ZipFileName="SvnTools.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+  </Target>
+
+  <Target Name="Build" DependsOnTargets="Compile">
+    
+    <!-- Merge together library files -->
+    <ILMerge InputAssemblies="Source\SvnTools\bin\$(BuildConfiguration)\SvnTools.exe;$(LibraryFolder)\Ionic.Zip.Reduced.dll;$(LibraryFolder)\log4net.dll"
+             OutputFile="$(BuildFolder)\SvnTools.exe" />
+    <Copy SourceFiles="Source\SvnTools\bin\$(BuildConfiguration)\SvnTools.exe.config" 
+          DestinationFolder="$(BuildFolder)" />
+    
+  </Target>
+
+</Project>
