@@ -57,7 +57,7 @@
     <AssemblyInfo CodeLanguage="CS"
       OutputFile="$(MSBuildProjectDirectory)\Source\GlobalAssemblyInfo.cs"
       AssemblyCompany="LoreSoft"
-      AssemblyProduct="SvnTools"
+      AssemblyProduct="SvnBackup"
       AssemblyCopyright="Copyright (c) $(Year) LoreSoft."
       AssemblyConfiguration="$(BuildConfiguration)"
       AssemblyVersion="$(Major).$(BindMinor).$(BindBuild).$(BindRevision)"
@@ -78,15 +78,15 @@
     </CreateItem>
 
     <Zip Files="@(ZipFiles)"
-			 ZipFileName="SvnTools.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+			 ZipFileName="SvnBackup.v$(Major).$(Minor).$(Build).$(Revision).zip" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="Compile">
     
     <!-- Merge together library files -->
-    <ILMerge InputAssemblies="Source\SvnTools\bin\$(BuildConfiguration)\SvnTools.exe;$(LibraryFolder)\Ionic.Zip.Reduced.dll;$(LibraryFolder)\log4net.dll"
-             OutputFile="$(BuildFolder)\SvnTools.exe" />
-    <Copy SourceFiles="Source\SvnTools\bin\$(BuildConfiguration)\SvnTools.exe.config" 
+    <ILMerge InputAssemblies="Source\SvnBackup\bin\$(BuildConfiguration)\SvnBackup.exe;$(LibraryFolder)\Ionic.Zip.Reduced.dll;$(LibraryFolder)\log4net.dll"
+             OutputFile="$(BuildFolder)\SvnBackup.exe" />
+    <Copy SourceFiles="Source\SvnBackup\bin\$(BuildConfiguration)\SvnBackup.exe.config" 
           DestinationFolder="$(BuildFolder)" />
     
   </Target>

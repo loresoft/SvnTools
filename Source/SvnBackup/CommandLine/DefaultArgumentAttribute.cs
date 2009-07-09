@@ -2,7 +2,7 @@ using System;
 
 // $Id$
 
-namespace SvnTools.CommandLine
+namespace SvnBackup.CommandLine
 {
 	/// <summary>
 	/// Indicates that this argument is the default argument.

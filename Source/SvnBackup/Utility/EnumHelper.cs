@@ -4,7 +4,7 @@ using System.Text;
 
 // $Id$
 
-namespace SvnTools.Utility
+namespace SvnBackup.Utility
 {
     /// <summary>
     /// A class to help with Enum Flags.

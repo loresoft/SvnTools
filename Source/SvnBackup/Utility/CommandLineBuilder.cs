@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 // $Id$
 
-namespace SvnTools.Utility
+namespace SvnBackup.Utility
 {
     public class CommandLineBuilder
     {

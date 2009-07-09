@@ -1,7 +1,7 @@
 
 // $Id$
 
-namespace SvnTools.CommandLine
+namespace SvnBackup.CommandLine
 {
 	/// <summary>
     /// A delegate used in error reporting.

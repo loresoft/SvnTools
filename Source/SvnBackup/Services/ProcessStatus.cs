@@ -4,7 +4,7 @@ using System.Text;
 
 // $Id$
 
-namespace SvnTools.Services
+namespace SvnBackup.Services
 {
     public enum ProcessStatus
     {

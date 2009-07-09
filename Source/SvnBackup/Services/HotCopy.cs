@@ -1,26 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
-using SvnTools.Utility;
+using SvnBackup.Utility;
 
 // $Id$
 
-namespace SvnTools.Services
+namespace SvnBackup.Services
 {
     /// <summary>
-    /// 
+    /// A class encapsulating the hotcopy command from svnadmin.
     /// </summary>
-    public class SvnVersion : ProcessBase
+    public class HotCopy : ProcessBase
     {
-        private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
-
         /// <summary>
         /// Gets or sets the repository path.
         /// </summary>
         /// <value>The repository path.</value>
         public string RepositoryPath { get; set; }
 
+        /// <summary>
+        /// Gets or sets the backup path.
+        /// </summary>
+        /// <value>The backup path.</value>
+        public string BackupPath { get; set; }
 
         /// <summary>
         /// Gets the name of the executable file to run.
@@ -28,7 +31,7 @@ namespace SvnTools.Services
         /// <value>The name of the executable file to run.</value>
         protected override string ToolName
         {
-            get { return "svnlook.exe"; }
+            get { return "svnadmin.exe"; }
         }
 
         /// <summary>
@@ -40,30 +43,11 @@ namespace SvnTools.Services
         protected override string GenerateCommandLineCommands()
         {
             var command = new CommandLineBuilder();
-            command.AppendSwitch("youngest");
+            command.AppendSwitch("hotcopy");
             command.AppendFileNameIfNotNull(RepositoryPath);
+            command.AppendFileNameIfNotNull(BackupPath);
 
             return command.ToString();
-        }
-
-        /// <summary>
-        /// Try to get the revision from the StandardOutput.
-        /// </summary>
-        /// <param name="revision">The revision.</param>
-        /// <returns><c>true</c> if revision was found; otherwise <c>false</c>.</returns>
-        public bool TryGetRevision(out int revision)
-        {
-            revision = 0;
-
-            if (string.IsNullOrEmpty(StandardOutput))
-                return false;
-
-            Match revMatch = _revisionParse.Match(StandardOutput);
-            if (!revMatch.Success)
-                return false;
-
-            string tempRev = revMatch.Groups["Rev"].Value;
-            return int.TryParse(tempRev, out revision);
         }
     }
 }

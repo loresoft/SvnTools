@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SvnTools.CommandLine;
+using SvnBackup.CommandLine;
 
 // $Id$
 
-namespace SvnTools
+namespace SvnBackup
 {
     /// <summary>
     /// A class representing the command line arguments.

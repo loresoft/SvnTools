@@ -8,7 +8,7 @@ using System.Threading;
 
 // $Id$
 
-namespace SvnTools.Services
+namespace SvnBackup.Services
 {
     /// <summary>
     /// A base class to run a process.

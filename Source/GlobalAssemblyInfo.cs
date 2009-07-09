@@ -15,12 +15,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("LoreSoft")]
-[assembly: AssemblyProduct("SvnTools")]
+[assembly: AssemblyProduct("SvnBackup")]
 [assembly: AssemblyCopyright("Copyright (c) 2009 LoreSoft.")]
 [assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.1")]
-[assembly: AssemblyInformationalVersion("1.0.0.1")]
+[assembly: AssemblyFileVersion("1.0.0.2")]
+[assembly: AssemblyInformationalVersion("1.0.0.2")]
 
 
 
@@ -28,7 +28,7 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyCompany = "LoreSoft";
     
-    internal const string AssemblyProduct = "SvnTools";
+    internal const string AssemblyProduct = "SvnBackup";
     
     internal const string AssemblyCopyright = "Copyright (c) 2009 LoreSoft.";
     
@@ -36,9 +36,9 @@ internal sealed partial class ThisAssembly {
     
     internal const string AssemblyVersion = "1.0.0.0";
     
-    internal const string AssemblyFileVersion = "1.0.0.1";
+    internal const string AssemblyFileVersion = "1.0.0.2";
     
-    internal const string AssemblyInformationalVersion = "1.0.0.1";
+    internal const string AssemblyInformationalVersion = "1.0.0.2";
     
     private ThisAssembly() {
     }

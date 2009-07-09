@@ -8,7 +8,7 @@ using System.Text;
 
 // $Id$
 
-namespace SvnTools.CommandLine
+namespace SvnBackup.CommandLine
 {
 	/// <summary>
 	/// Parser for command line arguments.

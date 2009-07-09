@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvnTools", "SvnTools\SvnTools.csproj", "{9741C214-53FB-4D17-8A3F-391ED8389EA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvnBackup", "SvnBackup\SvnBackup.csproj", "{9741C214-53FB-4D17-8A3F-391ED8389EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvnTools.Tests", "SvnTools.Tests\SvnTools.Tests.csproj", "{87E049EB-DC22-4103-8887-294579BED773}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvnBackup.Tests", "SvnBackup.Tests\SvnBackup.Tests.csproj", "{87E049EB-DC22-4103-8887-294579BED773}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FF2B4BE8-4601-4C81-8874-7BEBCC71A847}"
 	ProjectSection(SolutionItems) = preProject

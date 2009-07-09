@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 // $Id$
 
-namespace SvnTools.CommandLine
+namespace SvnBackup.CommandLine
 {
 	/// <summary>
 	/// Allows control of command line parsing.

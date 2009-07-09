@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SvnTools.CommandLine;
+using SvnBackup.CommandLine;
 
 // $Id$
 
-namespace SvnTools
+namespace SvnBackup
 {
     class Program
     {
@@ -13,13 +13,17 @@ namespace SvnTools
         {
             if (Parser.ParseHelp(args))
             {
+                OutputHeader();
                 OutputUsageHelp();
                 return 0;
             }
 
+            StringBuilder errorBuffer = new StringBuilder();
             BackupArguments arguments = new BackupArguments();
-            if (!Parser.ParseArguments(args, arguments))
+            if (!Parser.ParseArguments(args, arguments, s => errorBuffer.AppendLine(s)))
             {
+                OutputHeader();
+                Console.Error.WriteLine(errorBuffer.ToString());
                 OutputUsageHelp();
                 return 1;
             }
@@ -32,7 +36,7 @@ namespace SvnTools
         private static void OutputUsageHelp()
         {
             Console.WriteLine();
-            Console.WriteLine("SvnTools.exe /r:<directory> /b:<directory> /c");
+            Console.WriteLine("SvnBackup.exe /r:<directory> /b:<directory> /c");
             Console.WriteLine();
             Console.WriteLine("     - BACKUP OPTIONS -");
             Console.WriteLine();
@@ -41,7 +45,8 @@ namespace SvnTools
 
         private static void OutputHeader()
         {
-            Console.WriteLine(@"SvnTools v" + ThisAssembly.AssemblyInformationalVersion);
+            Console.WriteLine("SvnBackup v{0}", ThisAssembly.AssemblyInformationalVersion);
+            Console.WriteLine();
         }
     }
 }

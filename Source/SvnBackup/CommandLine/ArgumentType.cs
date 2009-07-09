@@ -2,7 +2,7 @@ using System;
 
 // $Id$
 
-namespace SvnTools.CommandLine
+namespace SvnBackup.CommandLine
 {
 	/// <summary>
 	/// Used to control parsing of command line arguments.
