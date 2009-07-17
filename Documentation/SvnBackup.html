@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>SvnBackup - Backup Tool For Subv</title>
+</head>
+
+<body>
+
+<h1>SvnBackup - Backup Tool For Subversion Repositories</h1>
+<h2>Overview</h2>
+<p>The SvnBackup command line tool is used to create backup copies of your 
+<a href="http://subversion.tigris.org/">subversion</a> repositories.&nbsp; The source code is the life blood of your 
+application.&nbsp; Keeping the source repository backed up is major part in 
+keeping your team going in case something goes wrong with your repository.</p>
+<h2>Features</h2>
+<ul>
+	<li>Backup repository using hotcopy command</li>
+	<li>Backup folder management</li>
+	<li>Support repository parent directory</li>
+	<li>Keep x number of backups</li>
+	<li>Compress backups</li>
+</ul>
+<h2>Backup Process</h2>
+<p>SvnBackup
+follows the <a href="http://svnbook.red-bean.com/nightly/en/svn.reposadmin.maint.html#svn.reposadmin.maint.backup">recommend way of backing up</a> your subversion repository.&nbsp; 
+While you can xcopy your repository, it may not always be the safest.&nbsp; 
+SvnBackup automates the process by using
+<a href="http://svnbook.red-bean.com/nightly/en/svn.ref.svnadmin.c.hotcopy.html">
+svnadmin hotcopy</a> command.&nbsp; The 
+hotcopy command is the only safe way to make a backup copy of your repository.</p>
+<p>SvnBackup also support starting from a parent folder that has all your 
+repositories.&nbsp; The tool will loop through all the repositories in that 
+folder backing each 
+up. The following folder layout contains imaginary repositories:
+<code class="literal">calculator</code>, <code class="literal">calendar</code>, and
+<code class="literal">spreadsheet</code>.</p>
+<pre class="screen">repo/
+   calculator/
+   calendar/
+   spreadsheet/
+</pre>
+<p>The backups are stored in a root backup folder.&nbsp; SvnBackup will create a 
+subfolder for each repository.&nbsp; Then it will create a folder 
+for the current revision being backed up.&nbsp; The hotcopy will be placed in 
+the revision folder.&nbsp; This allows you to keep multiple backup versions of your 
+repository.&nbsp; The following is an example of the backup folder structure 
+created by SvnBackup.</p>
+<pre class="screen">backup/
+   calculator/
+      v0000001/
+      v0000008/
+      v0000017/
+   calendar/
+      v0000001/
+      v0000014/
+      v0000127/
+   spreadsheet/
+      v0000001/
+      v0000023/
+      v0000047/
+</pre>
+<p>SvnBackup supports pruning your backups to only keep so many.&nbsp; For 
+example, you can keep the last 10 backups.</p>
+<p>Another feature of SvnBackup is to compress the backup.&nbsp; If you have a 
+lot of repositories, zipping up the backup can save a lot of space.</p>
+<h2>Command Line Options</h2>
+<pre>SvnBackup.exe /r:&lt;directory&gt; /b:&lt;directory&gt; /c
+
+     - BACKUP OPTIONS -
+
+/history:&lt;int&gt;        Number of backups to keep. (/n)
+/compress             Compress backup folders. (/c)
+/repository:&lt;string&gt;  Repository root folder. (/r)
+/backup:&lt;string&gt;      Backup root folder. (/b)
+/svn:&lt;string&gt;         Path to subversion bin folder. (/s)
+</pre>
+
+</body>
+
+</html>
