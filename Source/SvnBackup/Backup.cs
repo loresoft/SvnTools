@@ -93,24 +93,24 @@ namespace SvnBackup
             int rev;
 
             // version
-            using (SvnVersion version = new SvnVersion())
+            using (SvnLook look = new SvnLook("youngest"))
             {
-                version.RepositoryPath = repo.FullName;
+                look.RepositoryPath = repo.FullName;
                 if (!string.IsNullOrEmpty(args.SubverisonPath))
                 {
-                    version.ToolPath = args.SubverisonPath;
+                    look.ToolPath = args.SubverisonPath;
                 }
 
-                version.Execute();
-                if (!string.IsNullOrEmpty(version.StandardError))
-                    _log.Info(version.StandardError);
+                look.Execute();
+                if (!string.IsNullOrEmpty(look.StandardError))
+                    _log.Info(look.StandardError);
 
-                if (!version.TryGetRevision(out rev))
+                if (!look.TryGetRevision(out rev))
                 {
                     _log.WarnFormat("'{0}' is not a repository.", repo.Name);
 
-                    if (!string.IsNullOrEmpty(version.StandardOutput))
-                        _log.Info(version.StandardOutput);
+                    if (!string.IsNullOrEmpty(look.StandardOutput))
+                        _log.Info(look.StandardOutput);
 
                     return null;
                 }
@@ -127,12 +127,14 @@ namespace SvnBackup
                 zipFile.Save(backupZipPath);
             }
 
-            DirectoryDelete(backupRevPath);
-            Directory.Delete(backupRevPath);
+            PathHelper.DeleteDirectory(backupRevPath);
         }
 
         private static void PruneBackups(string backupRepoPath, int historyCount)
         {
+            if (historyCount < 1)
+                return;
+
             var dirs = Directory.GetDirectories(backupRepoPath);
             if (dirs.Length > historyCount)
             {
@@ -140,8 +142,7 @@ namespace SvnBackup
                 {
                     string dir = dirs[i];
 
-                    DirectoryDelete(dir);
-                    Directory.Delete(dir);
+                    PathHelper.DeleteDirectory(dir);
                     _log.InfoFormat("Removed backup '{0}'.", dir);
                 }
             }
@@ -159,26 +160,6 @@ namespace SvnBackup
             }
         }
 
-        private static void DirectoryDelete(string path)
-        {
-            //work around issues with Directory.Delete(path, true)
-            var dir = new DirectoryInfo(path);
-
-            foreach (var info in dir.GetFileSystemInfos())
-            {
-                // clear readonly and hidden flags
-                if (EnumHelper.IsFlagOn(info.Attributes, FileAttributes.ReadOnly))
-                    info.Attributes = EnumHelper.SetFlagOff(info.Attributes, FileAttributes.ReadOnly);
-                if (EnumHelper.IsFlagOn(info.Attributes, FileAttributes.Hidden))
-                    info.Attributes = EnumHelper.SetFlagOff(info.Attributes, FileAttributes.Hidden);
-
-                if (EnumHelper.IsFlagOn(info.Attributes, FileAttributes.Directory))
-                    DirectoryDelete(info.FullName);
-
-                info.Delete();
-                info.Refresh();
-            }
-        }
 
         private static bool IsRepository(DirectoryInfo path)
         {

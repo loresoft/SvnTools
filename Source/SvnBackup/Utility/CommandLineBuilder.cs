@@ -10,7 +10,17 @@ namespace SvnBackup.Utility
     {
         private static readonly Regex _allowedUnquoted = new Regex(@"^[a-z\\/:0-9\._+\-=]*$", RegexOptions.IgnoreCase);
         private static readonly Regex _definitelyNeedQuotes = new Regex(@"[|><\s,;]+", RegexOptions.None);
-        private readonly StringBuilder _commandLine = new StringBuilder();
+        private readonly StringBuilder _commandLine;
+
+        public CommandLineBuilder()
+        {
+            _commandLine = new StringBuilder();
+        }
+
+        public CommandLineBuilder(string commandLine)
+        {
+            _commandLine = new StringBuilder(commandLine);
+        }
 
         protected StringBuilder CommandLine
         {

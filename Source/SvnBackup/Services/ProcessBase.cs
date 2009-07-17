@@ -18,10 +18,8 @@ namespace SvnBackup.Services
         private int _exitCode;
 
         private readonly StringBuilder _standardErrorData;
-        private TextWriter _standardErrorWriter;
 
         private readonly StringBuilder _standardOutputData;
-        private TextWriter _standardOutputWriter;
 
         private ProcessStatus _status = ProcessStatus.Ready;
         private int _timeout;
@@ -131,6 +129,10 @@ namespace SvnBackup.Services
             get { return _standardErrorData.ToString(); }
         }
 
+        protected TextWriter StandardErrorWriter { get; set; }
+
+        protected TextWriter StandardOutputWriter { get; set; }
+
         #region IDisposable Members
 
         public void Dispose()
@@ -224,8 +226,12 @@ namespace SvnBackup.Services
 
             _standardErrorData.Length = 0;
             _standardOutputData.Length = 0;
-            _standardErrorWriter = TextWriter.Synchronized(new StringWriter(_standardErrorData));
-            _standardOutputWriter = TextWriter.Synchronized(new StringWriter(_standardOutputData));
+            
+            if (StandardErrorWriter == null)
+                StandardErrorWriter = TextWriter.Synchronized(new StringWriter(_standardErrorData));
+
+            if (StandardOutputWriter == null)
+                StandardOutputWriter = TextWriter.Synchronized(new StringWriter(_standardOutputData));
 
             _toolExited = new ManualResetEvent(false);
             _toolTimeoutExpired = new ManualResetEvent(false);
@@ -270,8 +276,8 @@ namespace SvnBackup.Services
                 _toolExited.Close();
                 _toolTimeoutExpired.Close();
 
-                _standardErrorWriter.Dispose();
-                _standardOutputWriter.Dispose();
+                StandardErrorWriter.Dispose();
+                StandardOutputWriter.Dispose();
                 if (_toolTimer != null)
                     _toolTimer.Dispose();
             }
@@ -384,15 +390,15 @@ namespace SvnBackup.Services
             if (e.Data == null)
                 return;
 
-            _standardErrorWriter.WriteLine(e.Data);
+            StandardErrorWriter.WriteLine(e.Data);
         }
 
-        private void ReceiveStandardOutputData(object sender, DataReceivedEventArgs e)
+        private void  ReceiveStandardOutputData(object sender, DataReceivedEventArgs e)
         {
             if (e.Data == null)
                 return;
 
-            _standardOutputWriter.WriteLine(e.Data);
+            StandardOutputWriter.WriteLine(e.Data);
         }
 
         private void ReceiveTimeoutNotification(object unused)
@@ -429,15 +435,34 @@ namespace SvnBackup.Services
         {
             if (disposing)
             {
-                if (_standardErrorWriter != null)
-                    _standardErrorWriter.Dispose();
+                if (StandardErrorWriter != null)
+                    StandardErrorWriter.Dispose();
 
-                if (_standardOutputWriter != null)
-                    _standardOutputWriter.Dispose();
+                if (StandardOutputWriter != null)
+                    StandardOutputWriter.Dispose();
 
                 if (_toolTimer != null)
                     _toolTimer.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Appends to the standard error writer.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
+        protected virtual void AppendStandardError(string message)
+        {
+            StandardErrorWriter.WriteLine(message);
+        }
+
+        /// <summary>
+        /// Appends to the standard error writer.
+        /// </summary>
+        /// <param name="format">A composite format string.</param>
+        /// <param name="args">An System.Object array containing zero or more objects to format.</param>
+        protected virtual void AppendStandardError(string format, params object[] args)
+        {
+            AppendStandardError(string.Format(format, args));
         }
     }
 }
