@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("SvnTools")]
-[assembly: AssemblyDescription("Admin tools for subversion")]
+[assembly: AssemblyTitle("SvnBackup")]
+[assembly: AssemblyDescription("Backup tool for Subversion repositories.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

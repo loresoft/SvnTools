@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using SvnBackup.CommandLine;
+using SvnTools;
+using SvnTools.CommandLine;
 
 // $Id$
 

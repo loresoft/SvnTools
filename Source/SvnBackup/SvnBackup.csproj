@@ -49,30 +49,17 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Backup.cs" />
-    <Compile Include="CommandLine\ArgumentAttribute.cs" />
-    <Compile Include="CommandLine\ArgumentType.cs" />
-    <Compile Include="CommandLine\DefaultArgumentAttribute.cs" />
-    <Compile Include="CommandLine\ErrorReporter.cs" />
-    <Compile Include="CommandLine\Parser.cs" />
-    <Compile Include="BackupArguments.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ProcessBase.cs" />
-    <Compile Include="Services\ProcessStatus.cs" />
-    <Compile Include="Services\HotCopy.cs" />
-    <Compile Include="Services\SvnAdmin.cs" />
-    <Compile Include="Services\SvnClient.cs" />
-    <Compile Include="Services\SvnLook.cs" />
-    <Compile Include="Utility\CommandLineBuilder.cs" />
-    <Compile Include="Utility\EnumHelper.cs" />
-    <Compile Include="Utility\PathHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="CommandLine\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SvnTools\SvnTools.csproj">
+      <Project>{D005FA62-3A70-48B9-B8A7-A7C14AE36774}</Project>
+      <Name>SvnTools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
