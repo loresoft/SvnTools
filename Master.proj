@@ -25,12 +25,11 @@
 
 
   <ItemGroup>
+    <DefaultExclude Include="**\.svn\**" />
     <DefaultExclude Include="**\obj\**" />
     <DefaultExclude Include="**\bin\**" />
-    <DefaultExclude Include="**\Sample\**" />
-    <DefaultExclude Include="**\Libraries\**" />
-    <DefaultExclude Include="**\Help\**" />
-    <DefaultExclude Include="**\Patch\**" />
+    <DefaultExclude Include="**\Test\**" />
+    <DefaultExclude Include="**\Logs\**" />
     <DefaultExclude Include="**\_ReSharper*\**" />
     <DefaultExclude Include="*.proj" />
     <DefaultExclude Include="*.dbml" />
@@ -38,6 +37,7 @@
     <DefaultExclude Include="**\*.user" />
     <DefaultExclude Include="**\*.resharper" />
     <DefaultExclude Include="**\*.cache" />
+    <DefaultExclude Include="**\*.suo" />
     <DefaultExclude Include="*.teamcity.*" />
   </ItemGroup>
 
@@ -78,7 +78,16 @@
     </CreateItem>
 
     <Zip Files="@(ZipFiles)"
-			 ZipFileName="SvnBackup.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+         ZipFileName="SvnBackup-Source.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+
+    <CreateItem Include="Build\*.*" Exclude="@(DefaultExclude);**\*.pdb" >
+      <Output TaskParameter="Include" ItemName="BinFiles" />
+    </CreateItem>
+
+    <Zip Files="@(BinFiles)"
+         WorkingDirectory="Build"
+         ZipFileName="SvnBackup.v$(Major).$(Minor).$(Build).$(Revision).zip" />
+
   </Target>
 
   <Target Name="Build" DependsOnTargets="Compile">

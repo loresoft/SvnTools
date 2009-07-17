@@ -112,6 +112,15 @@ namespace SvnTools.Services
             // raw arguments
             commandLine.AppendSwitchIfNotNull("", Arguments);
         }
+
+        public static class Commands
+        {
+            public const string Create = "create";
+            public const string Dump = "dump";
+            public const string Hotcopy = "hotcopy";
+            public const string Load = "load";
+            public const string Verify = "verify";
+        }
     }
 
 }

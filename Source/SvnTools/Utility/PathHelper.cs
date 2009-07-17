@@ -5,10 +5,46 @@ using System.Text;
 
 namespace SvnTools.Utility
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class PathHelper
     {
+        /// <summary>
+        /// Determines whether the specified path is repository.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified path is repository; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsRepository(string path)
+        {
+            string formatFile = Path.Combine(Path.GetFullPath(path), "format");
+            return File.Exists(formatFile);
+        }
+
+        /// <summary>
+        /// Creates the directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public static void CreateDirectory(string path)
+        {
+            if (Directory.Exists(path))
+                return;
+
+            Directory.CreateDirectory(path);
+        }
+
+
+        /// <summary>
+        /// Deletes the directory.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public static void DeleteDirectory(string path)
         {
+            if (!Directory.Exists(path))
+                return;
+
             DeleteDirectoryInternal(path);
             Directory.Delete(path, true);
         }

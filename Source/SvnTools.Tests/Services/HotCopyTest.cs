@@ -26,15 +26,18 @@ namespace SvnTools.Tests.Services
         [Test]
         public void Execute()
         {
-            string repositoryPath = @"D:\svn\repo\Calculator";
-            string backupPath = Path.GetFullPath(@"Calculator-backup");
+            string repositoryPath = TestHelper.TestRepository;
+            string backupPath = Path.Combine(TestHelper.BackupPath, "Hotcopy.Test");
 
+            // remove existing
             if (Directory.Exists(backupPath))
                 PathHelper.DeleteDirectory(backupPath);
             
-            if (!Directory.Exists(backupPath))
-                Directory.CreateDirectory(backupPath);
-            
+            Directory.CreateDirectory(backupPath);
+
+            // make sure there is a repo
+            TestHelper.CreateRepository(TestHelper.TestRepository, false);
+
             HotCopy hotcopy = new HotCopy();
             hotcopy.RepositoryPath = repositoryPath;
             hotcopy.BackupPath = backupPath;
@@ -42,6 +45,7 @@ namespace SvnTools.Tests.Services
             bool result = hotcopy.Execute();
 
             Assert.IsTrue(result);
+            Assert.IsTrue(PathHelper.IsRepository(backupPath));
         }
     }
 }

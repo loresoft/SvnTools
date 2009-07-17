@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using SvnTools.Services;
+using SvnTools.Utility;
 
 namespace SvnTools.Tests.Services
 {
@@ -25,24 +26,17 @@ namespace SvnTools.Tests.Services
         [Test]
         public void Youngest()
         {
-            string repositoryPath = Path.GetFullPath("SvnLook-Repo");
+            string repositoryPath = TestHelper.TestRepository;
 
-            if (!Directory.Exists(repositoryPath))
-            {
-                using (var svnAdmin = new SvnAdmin("create"))
-                {
-                    svnAdmin.RepositoryPath = repositoryPath;
-                    var r = svnAdmin.Execute();
-                    Assert.IsTrue(r);
-                }                
-            }
+            // make sure there is a repo
+            TestHelper.CreateRepository(repositoryPath, false);
 
             using (var look = new SvnLook("youngest"))
             {
                 look.RepositoryPath = repositoryPath;
-                var lr = look.Execute();
+                var r = look.Execute();
 
-                Assert.IsTrue(lr);
+                Assert.IsTrue(r);
 
                 int rev;
                 Assert.IsTrue(look.TryGetRevision(out rev));

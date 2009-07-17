@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using SvnTools.Services;
+using SvnTools.Utility;
 
 namespace SvnTools.Tests.Services
 {
@@ -25,35 +26,28 @@ namespace SvnTools.Tests.Services
         [Test]
         public void Create()
         {
+            string repositoryPath = Path.Combine(TestHelper.ParentPath, "SvnAdminTest.Create");
+            PathHelper.DeleteDirectory(repositoryPath);
+
             SvnAdmin svnAdmin = new SvnAdmin("create");
-            svnAdmin.RepositoryPath = Path.GetFullPath("SvnAdmin-Repo");
+            svnAdmin.RepositoryPath = repositoryPath;
             bool r = svnAdmin.Execute();
 
             Assert.IsTrue(r);
+            Assert.IsTrue(PathHelper.IsRepository(repositoryPath));
         }
 
         [Test]
         public void Dump()
         {
-            SvnAdmin svnAdmin;
-            bool r;
+            string repositoryPath = Path.Combine(TestHelper.ParentPath, "SvnAdminTest.Create");
 
-            string repositoryPath = Path.GetFullPath("SvnAdmin-Repo");
+            TestHelper.CreateRepository(repositoryPath, false);
 
-            if (!Directory.Exists(repositoryPath))
-            {
-                svnAdmin = new SvnAdmin("create");
-
-                svnAdmin.RepositoryPath = repositoryPath;
-                r = svnAdmin.Execute();
-
-                Assert.IsTrue(r);
-            }
-
-            svnAdmin = new SvnAdmin("dump");
+            SvnAdmin svnAdmin = new SvnAdmin(SvnAdmin.Commands.Dump);
             svnAdmin.RepositoryPath = repositoryPath;
             
-            r = svnAdmin.Execute();
+            bool r = svnAdmin.Execute();
             
             Assert.IsTrue(r);
         }

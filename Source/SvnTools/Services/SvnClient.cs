@@ -143,8 +143,19 @@ namespace SvnTools.Services
         protected virtual void AppendCommand(CommandLineBuilder commandLine)
         {
             commandLine.AppendSwitch(Command);
-            commandLine.AppendFileNameIfNotNull(RepositoryPath);
-            commandLine.AppendFileNameIfNotNull(LocalPath);
+            
+            // import has paths in diff order
+            if (Command == Commands.Import)
+            {
+                commandLine.AppendFileNameIfNotNull(LocalPath); 
+                commandLine.AppendFileNameIfNotNull(RepositoryPath);
+            }
+            else
+            {
+                commandLine.AppendFileNameIfNotNull(RepositoryPath);
+                commandLine.AppendFileNameIfNotNull(LocalPath);                
+            }
+            
         }
 
         /// <summary>
@@ -153,9 +164,9 @@ namespace SvnTools.Services
         /// <returns></returns>
         protected virtual void AppendArguments(CommandLineBuilder commandLine)
         {
-            commandLine.AppendSwitchIfNotNull("--username", Username);
-            commandLine.AppendSwitchIfNotNull("--password", Password);
-            commandLine.AppendSwitchIfNotNull("--message", Message);
+            commandLine.AppendSwitchIfNotNull("--username ", Username);
+            commandLine.AppendSwitchIfNotNull("--password ", Password);
+            commandLine.AppendSwitchIfNotNull("--message ", Message);
 
             commandLine.AppendSwitchIfTrue("--force", Force);
             commandLine.AppendSwitchIfTrue("--verbose", Verbose);
@@ -188,6 +199,17 @@ namespace SvnTools.Services
             string tempRev = revMatch.Groups["Rev"].Value;
             return int.TryParse(tempRev, out revision);
         }
+
+        public static class Commands
+        {
+            public const string Checkout = "checkout";
+            public const string Commit = "commit";
+            public const string Import = "import";
+            public const string List = "list";
+            public const string Status = "status";
+            public const string Update = "update";
+        }
+
     }
 }
 

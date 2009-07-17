@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using SvnTools.Services;
+using SvnTools.Utility;
 
 namespace SvnTools.Tests.Services
 {
@@ -13,7 +14,7 @@ namespace SvnTools.Tests.Services
         [SetUp]
         public void Setup()
         {
-            //TODO: NUnit setup
+            TestHelper.CreateRepository(TestHelper.TestRepository, false);
         }
 
         [TearDown]
@@ -25,28 +26,49 @@ namespace SvnTools.Tests.Services
         [Test]
         public void Checkout()
         {
-            string repositoryPath = Path.GetFullPath("SvnClient-Repo");
-
-            if (!Directory.Exists(repositoryPath))
+            string workingPath = Path.Combine(TestHelper.WorkingPath, "Checkout.Test");            
+            PathHelper.DeleteDirectory(workingPath);
+            
+            using(var client = new SvnClient(SvnClient.Commands.Checkout))
             {
-                using (var svnAdmin = new SvnAdmin("create"))
-                {
-                    svnAdmin.RepositoryPath = repositoryPath;
-                    var r = svnAdmin.Execute();
-                    Assert.IsTrue(r);
-                }
-            }
-
-            Uri repoUri = new Uri(repositoryPath);
-
-            using(var client = new SvnClient())
-            {
-                client.Command = "checkout";
-                client.RepositoryPath = repoUri.ToString();
-                client.LocalPath = Path.GetFullPath("SvnClient-Work");
+                client.RepositoryPath = TestHelper.TestRepositoryUri.ToString();
+                client.LocalPath = workingPath;
                 
                 var result = client.Execute();
 
+                Assert.IsTrue(result);
+
+                Console.WriteLine(client.StandardOutput);
+                Console.WriteLine(client.StandardError);
+            }
+        }
+
+        [Test]
+        public void Import()
+        {
+            string repositoryPath = Path.Combine(TestHelper.ParentPath, "SvnClientTest.Import");
+            TestHelper.CreateRepository(repositoryPath, true);
+
+            string workingPath = Path.Combine(TestHelper.WorkingPath, "Import.Test");
+            PathHelper.CreateDirectory(workingPath);
+
+            string testFile = Path.Combine(workingPath, "Readme.txt");
+            File.WriteAllText(testFile, "This is a read me text file.");
+
+            Uri repo = new Uri(repositoryPath);
+
+            using (var client = new SvnClient(SvnClient.Commands.Import))
+            {
+                client.RepositoryPath = repo.ToString();
+                client.LocalPath = workingPath;
+                client.Message = "First Import";
+
+                var result = client.Execute();
+
+                Assert.IsTrue(result);
+
+                Console.WriteLine(client.StandardOutput);
+                Console.WriteLine(client.StandardError);
             }
         }
     }
