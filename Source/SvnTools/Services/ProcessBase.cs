@@ -18,7 +18,6 @@ namespace SvnTools.Services
         private int _exitCode;
 
         private readonly StringBuilder _standardErrorData;
-
         private readonly StringBuilder _standardOutputData;
 
         private ProcessStatus _status = ProcessStatus.Ready;
@@ -129,12 +128,23 @@ namespace SvnTools.Services
             get { return _standardErrorData.ToString(); }
         }
 
+        /// <summary>
+        /// Gets or sets the standard error writer.
+        /// </summary>
+        /// <value>The standard error writer.</value>
         protected TextWriter StandardErrorWriter { get; set; }
 
+        /// <summary>
+        /// Gets or sets the standard output writer.
+        /// </summary>
+        /// <value>The standard output writer.</value>
         protected TextWriter StandardOutputWriter { get; set; }
 
         #region IDisposable Members
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -145,21 +155,15 @@ namespace SvnTools.Services
 
         private string ComputePathToTool()
         {
-            string path;
-            if (!string.IsNullOrEmpty(ToolPath))
-                path = Path.Combine(ToolPath, ToolName);
-            else
-                path = GenerateFullPathToTool();
-
-            return path;
+            return string.IsNullOrEmpty(ToolPath)
+                ? GenerateFullPathToTool()
+                : Path.Combine(ToolPath, ToolName);
         }
 
         private void ConfirmProcessExit(Process proc)
         {
             while (!proc.HasExited)
-            {
                 Thread.Sleep(50);
-            }
         }
 
         /// <summary>
@@ -174,8 +178,7 @@ namespace SvnTools.Services
                     File.Delete(fileName);
             }
             catch (IOException)
-            {
-            }
+            { }
         }
 
         /// <summary>
@@ -226,7 +229,7 @@ namespace SvnTools.Services
 
             _standardErrorData.Length = 0;
             _standardOutputData.Length = 0;
-            
+
             if (StandardErrorWriter == null)
                 StandardErrorWriter = TextWriter.Synchronized(new StringWriter(_standardErrorData));
 
@@ -266,8 +269,7 @@ namespace SvnTools.Services
                         _exitCode = proc.ExitCode;
                     }
                     catch (InvalidOperationException)
-                    {
-                    }
+                    { }
 
                     proc.Close();
                     proc = null;
@@ -299,8 +301,8 @@ namespace SvnTools.Services
         /// <returns>Returns the fully qualified path to the executable file.</returns>
         protected virtual string GenerateFullPathToTool()
         {
-            return string.IsNullOrEmpty(ToolPath) 
-                ? ToolName 
+            return string.IsNullOrEmpty(ToolPath)
+                ? ToolName
                 : Path.Combine(ToolPath, ToolName);
         }
 
@@ -380,7 +382,7 @@ namespace SvnTools.Services
         private void ReceiveExitNotification(object sender, EventArgs e)
         {
             if (_toolExited == null)
-                throw new InvalidOperationException("The signalling event for tool exit must be available.");
+                throw new InvalidOperationException("The signaling event for tool exit must be available.");
 
             _toolExited.Set();
         }
@@ -393,7 +395,7 @@ namespace SvnTools.Services
             StandardErrorWriter.WriteLine(e.Data);
         }
 
-        private void  ReceiveStandardOutputData(object sender, DataReceivedEventArgs e)
+        private void ReceiveStandardOutputData(object sender, DataReceivedEventArgs e)
         {
             if (e.Data == null)
                 return;

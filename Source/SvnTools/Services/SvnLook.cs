@@ -128,5 +128,23 @@ namespace SvnTools.Services
             string tempRev = revMatch.Groups["Rev"].Value;
             return int.TryParse(tempRev, out revision);
         }
+
+        /// <summary>
+        /// The commands for <see cref="SvnLook"/>.
+        /// </summary>
+        public static class Commands
+        {
+            /// <summary>History command.</summary>
+            public const string History = "history";
+            /// <summary>Info command.</summary>
+            public const string Info = "info";
+            /// <summary>Log command.</summary>
+            public const string Log = "log";
+            /// <summary>Tree command.</summary>
+            public const string Tree = "tree";
+            /// <summary>Youngest command.</summary>
+            public const string Youngest = "youngest";
+        }
+
     }
 }

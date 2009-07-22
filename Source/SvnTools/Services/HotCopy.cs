@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using SvnTools.Utility;
+﻿using SvnTools.Utility;
 
 // $Id$
 
@@ -13,6 +9,9 @@ namespace SvnTools.Services
     /// </summary>
     public class HotCopy : SvnAdmin
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HotCopy"/> class.
+        /// </summary>
         public HotCopy()
         {
             Command = "hotcopy";

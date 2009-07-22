@@ -8,15 +8,22 @@ using SvnTools.Utility;
 
 namespace SvnTools
 {
+    /// <summary>
+    /// A class to backup subversion repositories.
+    /// </summary>
     public static class Backup
     {
         #region Logging Definition
         private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(Backup));
         #endregion
 
+        /// <summary>
+        /// Runs a backup with the specified <see cref="BackupArguments"/>.
+        /// </summary>
+        /// <param name="args">The arguments used in the backup.</param>
         public static void Run(BackupArguments args)
         {
-            DirectoryInfo repoRoot = new DirectoryInfo(args.RepositoryRoot);
+            var repoRoot = new DirectoryInfo(args.RepositoryRoot);
             if (!repoRoot.Exists)
                 throw new InvalidOperationException(string.Format(
                     "The repository root directory '{0}' does not exist.",
@@ -27,7 +34,7 @@ namespace SvnTools
                 backupRoot.Create();
 
             // first try repoRoot as a repository
-            if (IsRepository(repoRoot))
+            if (PathHelper.IsRepository(repoRoot.FullName))
                 BackupRepository(args, repoRoot, backupRoot);
             // next try as partent folder for repositories
             else
@@ -93,13 +100,11 @@ namespace SvnTools
             int rev;
 
             // version
-            using (SvnLook look = new SvnLook("youngest"))
+            using (var look = new SvnLook(SvnLook.Commands.Youngest))
             {
                 look.RepositoryPath = repo.FullName;
                 if (!string.IsNullOrEmpty(args.SubverisonPath))
-                {
                     look.ToolPath = args.SubverisonPath;
-                }
 
                 look.Execute();
                 if (!string.IsNullOrEmpty(look.StandardError))
@@ -123,6 +128,10 @@ namespace SvnTools
         {
             using (var zipFile = new ZipFile())
             {
+                // for large zip files
+                zipFile.UseZip64WhenSaving = Zip64Option.AsNecessary;
+                zipFile.UseUnicodeAsNecessary = true;
+
                 zipFile.AddDirectory(backupRevPath);
                 zipFile.Save(backupZipPath);
             }
@@ -160,11 +169,5 @@ namespace SvnTools
             }
         }
 
-
-        private static bool IsRepository(DirectoryInfo path)
-        {
-            string formatFile = Path.Combine(path.FullName, "format");
-            return File.Exists(formatFile);
-        }
     }
 }

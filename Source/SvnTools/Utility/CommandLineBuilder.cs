@@ -6,27 +6,45 @@ using System.Text.RegularExpressions;
 
 namespace SvnTools.Utility
 {
+    /// <summary>
+    /// Comprises utility methods for constructing a command line.
+    /// </summary>
     public class CommandLineBuilder
     {
         private static readonly Regex _allowedUnquoted = new Regex(@"^[a-z\\/:0-9\._+\-=]*$", RegexOptions.IgnoreCase);
         private static readonly Regex _definitelyNeedQuotes = new Regex(@"[|><\s,;]+", RegexOptions.None);
         private readonly StringBuilder _commandLine;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandLineBuilder"/> class.
+        /// </summary>
         public CommandLineBuilder()
         {
             _commandLine = new StringBuilder();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommandLineBuilder"/> class.
+        /// </summary>
+        /// <param name="commandLine">The command line to start with.</param>
         public CommandLineBuilder(string commandLine)
         {
             _commandLine = new StringBuilder(commandLine);
         }
 
+        /// <summary>
+        /// Gets the command line buffer.
+        /// </summary>
+        /// <value>The command line.</value>
         protected StringBuilder CommandLine
         {
             get { return _commandLine; }
         }
 
+        /// <summary>
+        /// Appends the command line with file name represented by the parameter, inserting quotation marks if necessary.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         public void AppendFileNameIfNotNull(string fileName)
         {
             if (fileName == null)
@@ -37,6 +55,11 @@ namespace SvnTools.Utility
             AppendFileNameWithQuoting(fileName);
         }
 
+        /// <summary>
+        /// Appends the command line with a list of file names, inserting quotation marks if necessary. 
+        /// </summary>
+        /// <param name="fileNames">The file names to append. If the array is null reference, then this method has no effect.</param>
+        /// <param name="delimiter">The delimiter to put between file names in the command line.</param>
         public void AppendFileNamesIfNotNull(string[] fileNames, string delimiter)
         {
             VerifyThrowArgumentNull(delimiter, "delimiter");
@@ -57,6 +80,10 @@ namespace SvnTools.Utility
             }
         }
 
+        /// <summary>
+        /// Appends the command line with a file name, and surrounds the file name with quotation marks as necessary.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         protected void AppendFileNameWithQuoting(string fileName)
         {
             if (fileName == null)
@@ -70,6 +97,9 @@ namespace SvnTools.Utility
                 AppendTextWithQuoting(fileName);
         }
 
+        /// <summary>
+        /// Appends the space if command line is not empty.
+        /// </summary>
         protected void AppendSpaceIfNotEmpty()
         {
             if (CommandLine.Length == 0)
@@ -78,6 +108,10 @@ namespace SvnTools.Utility
             CommandLine.Append(" ");
         }
 
+        /// <summary>
+        /// Appends the command line with the specified switch. 
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
         public void AppendSwitch(string switchName)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -85,6 +119,11 @@ namespace SvnTools.Utility
             AppendTextUnquoted(switchName);
         }
 
+        /// <summary>
+        /// Appends the switch if true.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="condition">if set to <c>true</c> [condition].</param>
         public void AppendSwitchIfTrue(string switchName, bool condition)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -92,6 +131,11 @@ namespace SvnTools.Utility
                 AppendSwitch(switchName);
         }
 
+        /// <summary>
+        /// Appends the switch if not null.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameter">The parameter.</param>
         public void AppendSwitchIfNotNull(string switchName, string parameter)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -103,11 +147,24 @@ namespace SvnTools.Utility
             AppendTextWithQuoting(parameter);
         }
 
+        /// <summary>
+        /// Appends the switch if not default.
+        /// </summary>
+        /// <typeparam name="T">Type of the parameter</typeparam>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameter">The parameter.</param>
         public void AppendSwitchIfNotDefault<T>(string switchName, T parameter) where T : IEquatable<T>
         {
             AppendSwitchIfNotDefault(switchName, parameter, default(T));
         }
 
+        /// <summary>
+        /// Appends the switch if not default.
+        /// </summary>
+        /// <typeparam name="T">Type of the parameter</typeparam>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameter">The parameter.</param>
+        /// <param name="defaultValue">The default value.</param>
         public void AppendSwitchIfNotDefault<T>(string switchName, T parameter, T defaultValue) where T : IEquatable<T>
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -120,6 +177,12 @@ namespace SvnTools.Utility
             AppendTextWithQuoting(param);
         }
 
+        /// <summary>
+        /// Appends the switch if not null.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="delimiter">The delimiter.</param>
         public void AppendSwitchIfNotNull(string switchName, string[] parameters, string delimiter)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -143,6 +206,11 @@ namespace SvnTools.Utility
             }
         }
 
+        /// <summary>
+        /// Appends the switch unquoted if not null.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameter">The parameter.</param>
         public void AppendSwitchUnquotedIfNotNull(string switchName, string parameter)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -153,6 +221,12 @@ namespace SvnTools.Utility
             AppendTextUnquoted(parameter);
         }
 
+        /// <summary>
+        /// Appends the switch unquoted if not null.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="delimiter">The delimiter.</param>
         public void AppendSwitchUnquotedIfNotNull(string switchName, string[] parameters, string delimiter)
         {
             VerifyThrowArgumentNull(switchName, "switchName");
@@ -172,6 +246,10 @@ namespace SvnTools.Utility
             }
         }
 
+        /// <summary>
+        /// Appends the text unquoted.
+        /// </summary>
+        /// <param name="textToAppend">The text to append.</param>
         protected void AppendTextUnquoted(string textToAppend)
         {
             if (textToAppend == null)
@@ -180,6 +258,10 @@ namespace SvnTools.Utility
             CommandLine.Append(textToAppend);
         }
 
+        /// <summary>
+        /// Appends the text with quoting.
+        /// </summary>
+        /// <param name="textToAppend">The text to append.</param>
         protected void AppendTextWithQuoting(string textToAppend)
         {
             if (textToAppend == null)
@@ -198,6 +280,13 @@ namespace SvnTools.Utility
                 CommandLine.Append('"');
         }
 
+        /// <summary>
+        /// Determines whether [is quoting required] [the specified parameter].
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is quoting required] [the specified parameter]; otherwise, <c>false</c>.
+        /// </returns>
         protected virtual bool IsQuotingRequired(string parameter)
         {
             bool isQuotingRequired = false;
@@ -210,11 +299,22 @@ namespace SvnTools.Utility
             return isQuotingRequired;
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return CommandLine.ToString();
         }
 
+        /// <summary>
+        /// Verifies the throw no embedded double quotes.
+        /// </summary>
+        /// <param name="switchName">Name of the switch.</param>
+        /// <param name="parameter">The parameter.</param>
         protected virtual void VerifyThrowNoEmbeddedDoubleQuotes(string switchName, string parameter)
         {
             if (parameter == null)
@@ -235,6 +335,11 @@ namespace SvnTools.Utility
             throw new ArgumentException(message, "parameter");
         }
 
+        /// <summary>
+        /// Verifies the throw argument null.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <param name="parameterName">Name of the parameter.</param>
         internal static void VerifyThrowArgumentNull(object parameter, string parameterName)
         {
             if (parameter == null)

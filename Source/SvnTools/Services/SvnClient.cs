@@ -13,12 +13,19 @@ namespace SvnTools.Services
     {
         private static readonly Regex _revisionParse = new Regex(@"\b(?<Rev>\d+)", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvnClient"/> class.
+        /// </summary>
+        /// <param name="command">The command.</param>
         public SvnClient(string command)
             : this()
         {
             Command = command;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvnClient"/> class.
+        /// </summary>
         public SvnClient()
         {
             NonInteractive = true;
@@ -200,13 +207,22 @@ namespace SvnTools.Services
             return int.TryParse(tempRev, out revision);
         }
 
+        /// <summary>
+        /// The commands for <see cref="SvnClient"/>.
+        /// </summary>
         public static class Commands
         {
+            /// <summary>Checkout command.</summary>
             public const string Checkout = "checkout";
+            /// <summary>Commit command.</summary>
             public const string Commit = "commit";
+            /// <summary>Import command.</summary>
             public const string Import = "import";
+            /// <summary>List command.</summary>
             public const string List = "list";
+            /// <summary>Status command.</summary>
             public const string Status = "status";
+            /// <summary>Update command.</summary>
             public const string Update = "update";
         }
 

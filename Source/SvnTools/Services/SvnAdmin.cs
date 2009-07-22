@@ -113,12 +113,20 @@ namespace SvnTools.Services
             commandLine.AppendSwitchIfNotNull("", Arguments);
         }
 
+        /// <summary>
+        /// The commands for <see cref="SvnAdmin"/>.
+        /// </summary>
         public static class Commands
         {
+            /// <summary>Create command.</summary>
             public const string Create = "create";
+            /// <summary>Dump command.</summary>
             public const string Dump = "dump";
+            /// <summary>Hotcopy command.</summary>
             public const string Hotcopy = "hotcopy";
+            /// <summary>Load command.</summary>
             public const string Load = "load";
+            /// <summary>Verify command.</summary>
             public const string Verify = "verify";
         }
     }
