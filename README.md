@@ -58,5 +58,5 @@ Another feature of SvnBackup is to compress the backup.  If you have a lot of re
 
 #### Project Page
 
-*   Source Code - [http://code.google.com/p/dotsvntools/](http://code.google.com/p/dotsvntools/ "http://code.google.com/p/dotsvntools/")
-*   Download - [http://code.google.com/p/dotsvntools/downloads/list](http://code.google.com/p/dotsvntools/downloads/list "http://code.google.com/p/dotsvntools/downloads/list")
+*   Source Code - [https://github.com/loresoft/SvnTools/](https://github.com/loresoft/SvnTools/ "https://github.com/loresoft/SvnTools/")
+*   Download - [https://github.com/loresoft/SvnTools/releases](https://github.com/loresoft/SvnTools/releases "https://github.com/loresoft/SvnTools/releases")
